@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -122,15 +121,16 @@ func fatalf(format string, args ...any) {
 }
 
 func runGoShell() error {
-	cmd := exec.Command("go", "run", "github.com/sanurb/go-shell@latest")
+	if _, err := exec.LookPath("go"); err != nil {
+		return fmt.Errorf("go command is not available in PATH")
+	}
+
+	cmd := exec.Command("go", "run", "github.com/sanurb/go-shell@v0.0.0-20240610210302-f321eeeb5f28")
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
-		if errors.Is(err, exec.ErrNotFound) {
-			return fmt.Errorf("go command is not available in PATH")
-		}
 		return err
 	}
 
