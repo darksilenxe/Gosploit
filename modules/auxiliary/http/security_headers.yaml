@@ -1,0 +1,23 @@
+name: auxiliary/http/security_headers
+summary: Check for common missing security headers
+author: Gosploit Team
+references:
+  - https://owasp.org/www-project-secure-headers/
+options:
+  - name: url
+    description: Target URL for header inspection
+    required: true
+    defaultvalue: ""
+checks:
+  - id: missing_hsts
+    description: Verify Strict-Transport-Security header is present
+    severity: medium
+    indicator: strict-transport-security
+  - id: missing_csp
+    description: Verify Content-Security-Policy header is present
+    severity: high
+    indicator: content-security-policy
+  - id: missing_x_frame_options
+    description: Verify X-Frame-Options header is present
+    severity: medium
+    indicator: x-frame-options

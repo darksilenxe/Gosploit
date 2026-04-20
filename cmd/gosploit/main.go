@@ -9,6 +9,7 @@ import (
 
 	"github.com/darksilenxe/Gosploit/internal/framework"
 	"github.com/darksilenxe/Gosploit/internal/modules/sqlinjection"
+	"github.com/darksilenxe/Gosploit/internal/modules/yamltool"
 )
 
 type repeatedValues []string
@@ -29,6 +30,7 @@ func main() {
 	var (
 		listModules bool
 		moduleName  string
+		yamlPath    string
 		target      string
 		runModule   bool
 		showCurrent bool
@@ -37,6 +39,7 @@ func main() {
 
 	flag.BoolVar(&listModules, "list", false, "List available modules")
 	flag.StringVar(&moduleName, "module", "", "Select module name")
+	flag.StringVar(&yamlPath, "yaml", "", "Load a YAML-defined auxiliary module")
 	flag.StringVar(&target, "target", "", "Target identifier")
 	flag.BoolVar(&runModule, "run", false, "Run the active module")
 	flag.BoolVar(&showCurrent, "show", false, "Show selected module and options")
@@ -51,6 +54,12 @@ func main() {
 
 	if moduleName != "" {
 		must(engine.Use(moduleName))
+	}
+	if yamlPath != "" {
+		yamlModule, err := yamltool.Load(yamlPath)
+		must(err)
+		must(engine.Register(yamlModule))
+		must(engine.Use(yamlModule.Definition().Name))
 	}
 
 	for _, pair := range setOptions {
@@ -87,7 +96,7 @@ func main() {
 		}
 	}
 
-	if !listModules && moduleName == "" && !runModule && !showCurrent && len(setOptions) == 0 {
+	if !listModules && moduleName == "" && yamlPath == "" && !runModule && !showCurrent && len(setOptions) == 0 {
 		flag.Usage()
 	}
 }
