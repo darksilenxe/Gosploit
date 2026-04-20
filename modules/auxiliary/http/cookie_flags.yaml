@@ -1,0 +1,24 @@
+name: auxiliary/http/cookie_flags
+summary: Audit cookie security attribute indicators
+author: Gosploit Team
+references:
+  - https://owasp.org/www-community/controls/SecureCookieAttribute
+  - https://owasp.org/www-community/HttpOnly
+options:
+  - name: url
+    description: Target URL for Set-Cookie inspection
+    required: true
+    defaultvalue: ""
+checks:
+  - id: secure_flag_present
+    description: Check for Secure attribute in Set-Cookie values
+    severity: high
+    indicator: set-cookie: .*; secure
+  - id: httponly_flag_present
+    description: Check for HttpOnly attribute in Set-Cookie values
+    severity: medium
+    indicator: set-cookie: .*; httponly
+  - id: samesite_flag_present
+    description: Check for SameSite attribute in Set-Cookie values
+    severity: medium
+    indicator: set-cookie: .*; samesite
