@@ -105,7 +105,7 @@ func main() {
 		}
 	}
 
-	if !listModules && moduleName == "" && yamlPath == "" && !runModule && !runShell && !showCurrent && len(setOptions) == 0 {
+	if !listModules && moduleName == "" && yamlPath == "" && !runModule && !showCurrent && len(setOptions) == 0 {
 		flag.Usage()
 	}
 }
