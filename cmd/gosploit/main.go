@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/darksilenxe/Gosploit/internal/framework"
@@ -33,6 +34,7 @@ func main() {
 		yamlPath    string
 		target      string
 		runModule   bool
+		runShell    bool
 		showCurrent bool
 		setOptions  repeatedValues
 	)
@@ -42,9 +44,15 @@ func main() {
 	flag.StringVar(&yamlPath, "yaml", "", "Load a YAML-defined auxiliary module")
 	flag.StringVar(&target, "target", "", "Target identifier")
 	flag.BoolVar(&runModule, "run", false, "Run the active module")
+	flag.BoolVar(&runShell, "shell", false, "Launch go-shell interactive tool")
 	flag.BoolVar(&showCurrent, "show", false, "Show selected module and options")
 	flag.Var(&setOptions, "set", "Set option KEY=VALUE (can be repeated)")
 	flag.Parse()
+
+	if runShell {
+		must(runGoShell())
+		return
+	}
 
 	if listModules {
 		for _, def := range engine.List() {
@@ -110,4 +118,21 @@ func must(err error) {
 func fatalf(format string, args ...any) {
 	fmt.Fprintf(os.Stderr, format+"\n", args...)
 	os.Exit(1)
+}
+
+func runGoShell() error {
+	if _, err := exec.LookPath("go"); err != nil {
+		return fmt.Errorf("go command is not available in PATH")
+	}
+
+	cmd := exec.Command("go", "run", "github.com/sanurb/go-shell@v0.0.0-20240610210302-f321eeeb5f28")
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		return err
+	}
+
+	return nil
 }
