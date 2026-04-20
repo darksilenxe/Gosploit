@@ -13,12 +13,12 @@ checks:
   - id: missing_secure_flag
     description: Detect cookies missing the Secure attribute
     severity: high
-    indicator: set-cookie; secure
+    indicator: set-cookie: .*; secure
   - id: missing_httponly_flag
     description: Detect cookies missing the HttpOnly attribute
     severity: medium
-    indicator: set-cookie; httponly
+    indicator: set-cookie: .*; httponly
   - id: missing_samesite_flag
     description: Detect cookies missing the SameSite attribute
     severity: medium
-    indicator: set-cookie; samesite
+    indicator: set-cookie: .*; samesite
