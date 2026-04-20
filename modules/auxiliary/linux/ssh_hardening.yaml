@@ -17,11 +17,11 @@ checks:
   - id: root_login_disabled
     description: Check that PermitRootLogin is disabled
     severity: high
-    indicator: permitrootlogin no
+    indicator: PermitRootLogin no
   - id: password_auth_disabled
     description: Check that PasswordAuthentication is disabled
     severity: high
-    indicator: passwordauthentication no
+    indicator: PasswordAuthentication no
   - id: weak_kex_absent
     description: Check that weak key exchange algorithms are not configured
     severity: medium

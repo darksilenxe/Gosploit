@@ -17,11 +17,11 @@ checks:
   - id: deprecated_tls_versions
     description: Detect support for deprecated TLS versions
     severity: high
-    indicator: tls1.0,tls1.1
+    indicator: TLSv1.0,TLSv1.1
   - id: weak_cipher_suites
     description: Detect weak cipher suites such as RC4 or 3DES
     severity: high
-    indicator: rc4,3des
+    indicator: RC4,3DES
   - id: hsts_header_present
     description: Check for Strict-Transport-Security policy signaling
     severity: medium
