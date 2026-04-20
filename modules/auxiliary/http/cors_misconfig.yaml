@@ -1,0 +1,23 @@
+name: auxiliary/http/cors_misconfig
+summary: Check for risky CORS policy configurations
+author: Gosploit Team
+references:
+  - https://owasp.org/www-community/attacks/CORS_OriginHeaderScrutiny
+options:
+  - name: url
+    description: Target URL for CORS header inspection
+    required: true
+    defaultvalue: ""
+checks:
+  - id: wildcard_origin
+    description: Detect Access-Control-Allow-Origin set to wildcard
+    severity: high
+    indicator: access-control-allow-origin: *
+  - id: permissive_credentials
+    description: Detect Access-Control-Allow-Credentials enabled with broad origin policy
+    severity: high
+    indicator: access-control-allow-credentials: true
+  - id: overly_broad_methods
+    description: Detect over-permissive Access-Control-Allow-Methods values
+    severity: medium
+    indicator: access-control-allow-methods

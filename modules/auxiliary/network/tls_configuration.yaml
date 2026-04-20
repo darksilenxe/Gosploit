@@ -1,0 +1,28 @@
+name: auxiliary/network/tls_configuration
+summary: Check for weak TLS configuration indicators
+author: Gosploit Team
+references:
+  - https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration
+  - https://cheatsheetseries.owasp.org/cheatsheets/Transport_Layer_Security_Cheat_Sheet.html
+options:
+  - name: host
+    description: Target host for TLS inspection
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: Target service port
+    required: false
+    defaultvalue: "443"
+checks:
+  - id: deprecated_tls_versions
+    description: Detect support for deprecated TLS versions
+    severity: high
+    indicator: tls1.0,tls1.1
+  - id: weak_cipher_suites
+    description: Detect weak cipher suites such as RC4 or 3DES
+    severity: high
+    indicator: rc4,3des
+  - id: missing_hsts_enforcement
+    description: Identify endpoints without strict HTTPS policy signaling
+    severity: medium
+    indicator: strict-transport-security
