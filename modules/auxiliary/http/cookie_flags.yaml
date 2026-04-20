@@ -1,5 +1,5 @@
 name: auxiliary/http/cookie_flags
-summary: Check for missing secure cookie attributes
+summary: Audit cookie security attribute indicators
 author: Gosploit Team
 references:
   - https://owasp.org/www-community/controls/SecureCookieAttribute
@@ -10,15 +10,15 @@ options:
     required: true
     defaultvalue: ""
 checks:
-  - id: missing_secure_flag
-    description: Detect cookies missing the Secure attribute
+  - id: secure_flag_present
+    description: Check for Secure attribute in Set-Cookie values
     severity: high
     indicator: set-cookie: .*; secure
-  - id: missing_httponly_flag
-    description: Detect cookies missing the HttpOnly attribute
+  - id: httponly_flag_present
+    description: Check for HttpOnly attribute in Set-Cookie values
     severity: medium
     indicator: set-cookie: .*; httponly
-  - id: missing_samesite_flag
-    description: Detect cookies missing the SameSite attribute
+  - id: samesite_flag_present
+    description: Check for SameSite attribute in Set-Cookie values
     severity: medium
     indicator: set-cookie: .*; samesite

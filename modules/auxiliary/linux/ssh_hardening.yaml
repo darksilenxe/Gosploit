@@ -1,0 +1,28 @@
+name: auxiliary/linux/ssh_hardening
+summary: Audit Linux SSH hardening indicators
+author: Gosploit Team
+references:
+  - https://cheatsheetseries.owasp.org/cheatsheets/Secure_Product_Design_Cheat_Sheet.html
+  - https://www.ssh.com/academy/ssh/sshd_config
+options:
+  - name: host
+    description: Target Linux host running SSH
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: Target SSH port
+    required: false
+    defaultvalue: "22"
+checks:
+  - id: root_login_disabled
+    description: Check that PermitRootLogin is disabled
+    severity: high
+    indicator: permitrootlogin no
+  - id: password_auth_disabled
+    description: Check that PasswordAuthentication is disabled
+    severity: high
+    indicator: passwordauthentication no
+  - id: weak_kex_absent
+    description: Check that weak key exchange algorithms are not configured
+    severity: medium
+    indicator: diffie-hellman-group1-sha1

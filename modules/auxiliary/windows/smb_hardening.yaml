@@ -1,0 +1,28 @@
+name: auxiliary/windows/smb_hardening
+summary: Audit Windows SMB hardening indicators
+author: Gosploit Team
+references:
+  - https://learn.microsoft.com/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3
+  - https://learn.microsoft.com/windows/security/threat-protection/security-policy-settings/microsoft-network-server-digitally-sign-communications-always
+options:
+  - name: host
+    description: Target Windows host exposing SMB
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: Target SMB port
+    required: false
+    defaultvalue: "445"
+checks:
+  - id: smb_signing_enabled
+    description: Check that SMB signing is enforced
+    severity: high
+    indicator: smb signing required
+  - id: smbv1_disabled
+    description: Check that SMBv1 protocol support is disabled
+    severity: high
+    indicator: smbv1 disabled
+  - id: anonymous_access_restricted
+    description: Check that anonymous SMB/null session access is restricted
+    severity: medium
+    indicator: null session denied

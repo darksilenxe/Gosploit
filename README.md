@@ -19,6 +19,8 @@ go run ./cmd/gosploit -yaml ./modules/auxiliary/http/security_headers.yaml -set 
 go run ./cmd/gosploit -yaml ./modules/auxiliary/http/cors_misconfig.yaml -set url=https://example.com -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/http/cookie_flags.yaml -set url=https://example.com -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/network/tls_configuration.yaml -set host=example.com -set port=443 -show -run
+go run ./cmd/gosploit -yaml ./modules/auxiliary/linux/ssh_hardening.yaml -set host=linux.example.com -set port=22 -show -run
+go run ./cmd/gosploit -yaml ./modules/auxiliary/windows/smb_hardening.yaml -set host=win.example.com -set port=445 -show -run
 go run ./cmd/gosploit -module exploit/web/sqlinjection -set url=https://example.com/search -set param=q -run
 ```
 

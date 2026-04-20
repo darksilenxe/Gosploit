@@ -1,5 +1,5 @@
 name: auxiliary/network/tls_configuration
-summary: Check for weak TLS configuration indicators
+summary: Audit TLS configuration indicators
 author: Gosploit Team
 references:
   - https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration
@@ -22,7 +22,7 @@ checks:
     description: Detect weak cipher suites such as RC4 or 3DES
     severity: high
     indicator: rc4,3des
-  - id: missing_hsts_enforcement
-    description: Identify endpoints without strict HTTPS policy signaling
+  - id: hsts_header_present
+    description: Check for Strict-Transport-Security policy signaling
     severity: medium
     indicator: strict-transport-security
