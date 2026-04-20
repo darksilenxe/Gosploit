@@ -122,14 +122,14 @@ func fatalf(format string, args ...any) {
 }
 
 func runGoShell() error {
-	cmd := exec.Command("go-shell")
+	cmd := exec.Command("go", "run", "github.com/sanurb/go-shell@latest")
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	if err := cmd.Run(); err != nil {
 		if errors.Is(err, exec.ErrNotFound) {
-			return fmt.Errorf("go-shell is not installed or not in PATH")
+			return fmt.Errorf("go command is not available in PATH")
 		}
 		return err
 	}
