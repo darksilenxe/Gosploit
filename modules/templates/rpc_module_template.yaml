@@ -1,0 +1,19 @@
+name: auxiliary/network/<module_name>
+summary: Describe what this RPC module checks
+author: Your Name or Team
+references:
+  - https://attack.mitre.org/techniques/T1021/003/
+options:
+  - name: host
+    description: Target host exposing RPC service
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: RPC service port
+    required: false
+    defaultvalue: "135"
+checks:
+  - id: replace_with_check_id
+    description: Replace with the RPC security condition to verify
+    severity: medium
+    indicator: replace-with-rpc-indicator

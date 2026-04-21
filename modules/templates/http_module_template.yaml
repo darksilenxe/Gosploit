@@ -1,0 +1,19 @@
+name: auxiliary/http/<module_name>
+summary: Describe what this HTTP module checks
+author: Your Name or Team
+references:
+  - https://owasp.org/www-project-web-security-testing-guide/
+options:
+  - name: url
+    description: Target URL for HTTP inspection
+    required: true
+    defaultvalue: ""
+  - name: method
+    description: HTTP method to simulate
+    required: false
+    defaultvalue: "GET"
+checks:
+  - id: replace_with_check_id
+    description: Replace with the HTTP security condition to verify
+    severity: medium
+    indicator: replace-with-http-header-or-pattern

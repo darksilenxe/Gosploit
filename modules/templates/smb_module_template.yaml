@@ -1,0 +1,19 @@
+name: auxiliary/windows/<module_name>
+summary: Describe what this SMB module checks
+author: Your Name or Team
+references:
+  - https://learn.microsoft.com/windows-server/storage/file-server/smb-security
+options:
+  - name: host
+    description: Target Windows host exposing SMB
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: SMB service port
+    required: false
+    defaultvalue: "445"
+checks:
+  - id: replace_with_check_id
+    description: Replace with the SMB hardening condition to verify
+    severity: high
+    indicator: replace-with-smb-indicator
