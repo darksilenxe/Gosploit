@@ -1,0 +1,19 @@
+name: auxiliary/windows/<module_name>
+summary: Describe what this RDP module checks
+author: Your Name or Team
+references:
+  - https://learn.microsoft.com/windows-server/remote/remote-desktop-services/rds-security-guidance
+options:
+  - name: host
+    description: Target host exposing RDP
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: RDP service port
+    required: false
+    defaultvalue: "3389"
+checks:
+  - id: replace_with_check_id
+    description: Replace with the RDP security condition to verify
+    severity: high
+    indicator: replace-with-rdp-indicator

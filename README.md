@@ -44,3 +44,18 @@ checks:
 ```
 
 The current engine executes YAML checks in simulation mode and returns structured evidence that can be extended with real protocol logic.
+
+## Module templates
+
+Protocol starter templates are available in `/modules/templates`:
+
+- `modules/templates/http_module_template.yaml`
+- `modules/templates/smb_module_template.yaml`
+- `modules/templates/rdp_module_template.yaml`
+- `modules/templates/rpc_module_template.yaml`
+
+Copy one, replace placeholders, then load it with:
+
+```bash
+go run ./cmd/gosploit -yaml /path/to/your_module.yaml -show -run
+```
