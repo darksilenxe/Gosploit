@@ -100,8 +100,10 @@ func (l *limitedBuffer) String() string {
 }
 
 type metaSpec struct {
-	Script         string            `yaml:"script"`
-	Executable     string            `yaml:"executable"`
+	Script string `yaml:"script"`
+	// Executable is kept for backward compatibility with earlier schema drafts.
+	Executable string `yaml:"executable"`
+	// Tool is the preferred field for selecting any local Metasploit executable.
 	Tool           string            `yaml:"tool"`
 	Mode           string            `yaml:"mode"`
 	RequireConsent *bool             `yaml:"require_consent"`
