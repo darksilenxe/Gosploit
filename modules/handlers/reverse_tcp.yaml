@@ -1,0 +1,19 @@
+name: handler/reverse_tcp
+summary: Simulated reverse TCP handler profile
+author: Gosploit Team
+references:
+  - https://docs.metasploit.com/docs/using-metasploit/basics/how-to-use-a-metasploit-handler.html
+options:
+  - name: lhost
+    description: Local host to receive callback
+    required: true
+    defaultvalue: "127.0.0.1"
+  - name: lport
+    description: Local port to receive callback
+    required: true
+    defaultvalue: "4444"
+handler:
+  type: reverse_tcp
+  payload: generic/shell_reverse_tcp
+  lhost_option: lhost
+  lport_option: lport

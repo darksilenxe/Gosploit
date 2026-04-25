@@ -1,0 +1,19 @@
+name: handler/<handler_name>
+summary: Describe this handler behavior
+author: Your Name or Team
+references:
+  - https://docs.metasploit.com/docs/using-metasploit/basics/how-to-use-a-metasploit-handler.html
+options:
+  - name: lhost
+    description: Local host/IP for callback or bind listener
+    required: true
+    defaultvalue: "127.0.0.1"
+  - name: lport
+    description: Local port used by the handler
+    required: true
+    defaultvalue: "4444"
+handler:
+  type: reverse_tcp
+  payload: generic/shell_reverse_tcp
+  lhost_option: lhost
+  lport_option: lport

@@ -7,6 +7,7 @@ Gosploit is a Go-based exploit development and security testing framework scaffo
 - Module registry and runtime engine
 - Built-in simulated SQL injection module
 - YAML-defined auxiliary scanner/vulnerability-check modules
+- YAML-defined handlers
 - CLI entrypoint to list, select, configure, and run modules
 
 > Use only on systems you own or are explicitly authorized to test.
@@ -21,6 +22,7 @@ go run ./cmd/gosploit -yaml ./modules/auxiliary/http/cookie_flags.yaml -set url=
 go run ./cmd/gosploit -yaml ./modules/auxiliary/network/tls_configuration.yaml -set host=example.com -set port=443 -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/linux/ssh_hardening.yaml -set host=linux.example.com -set port=22 -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/windows/smb_hardening.yaml -set host=win.example.com -set port=445 -show -run
+go run ./cmd/gosploit -handler-yaml ./modules/handlers/reverse_tcp.yaml -set lhost=127.0.0.1 -set lport=4444 -show -run
 go run ./cmd/gosploit -module exploit/web/sqlinjection -set url=https://example.com/search -set param=q -run
 ```
 
@@ -45,6 +47,32 @@ checks:
 
 The current engine executes YAML checks in simulation mode and returns structured evidence that can be extended with real protocol logic.
 
+## YAML handler format
+
+```yaml
+name: handler/reverse_tcp
+summary: Simulated reverse TCP listener profile
+author: Gosploit Team
+options:
+  - name: lhost
+    description: Local host/IP for callback
+    required: true
+  - name: lport
+    description: Local listener port
+    required: true
+handler:
+  type: reverse_tcp
+  payload: generic/shell_reverse_tcp
+  lhost_option: lhost
+  lport_option: lport
+```
+
+Load and run a handler profile:
+
+```bash
+go run ./cmd/gosploit -handler-yaml ./modules/handlers/reverse_tcp.yaml -set lhost=127.0.0.1 -set lport=4444 -show -run
+```
+
 ## Module templates
 
 Protocol starter templates are available in `/modules/templates`:
@@ -53,6 +81,7 @@ Protocol starter templates are available in `/modules/templates`:
 - `modules/templates/smb_module_template.yaml`
 - `modules/templates/rdp_module_template.yaml`
 - `modules/templates/rpc_module_template.yaml`
+- `modules/templates/handler_template.yaml`
 
 Copy one, replace placeholders, then load it with:
 
