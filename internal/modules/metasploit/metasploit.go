@@ -72,23 +72,24 @@ func newLimitedBuffer(max int) *limitedBuffer {
 }
 
 func (l *limitedBuffer) Write(p []byte) (int, error) {
-	if len(p) == 0 {
+	originalLen := len(p)
+	if originalLen == 0 {
 		return 0, nil
 	}
 	if l.buf.Len() >= l.max {
 		l.truncated = true
-		return 0, nil
+		return originalLen, nil
 	}
 	available := l.max - l.buf.Len()
-	if len(p) > available {
+	if originalLen > available {
 		p = p[:available]
 		l.truncated = true
 	}
-	written, err := l.buf.Write(p)
+	_, err := l.buf.Write(p)
 	if err != nil {
 		return 0, err
 	}
-	return written, nil
+	return originalLen, nil
 }
 
 func (l *limitedBuffer) String() string {

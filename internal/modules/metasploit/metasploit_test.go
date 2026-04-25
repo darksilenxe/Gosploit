@@ -102,7 +102,7 @@ func TestExecuteWithRunnerAndOptionMapping(t *testing.T) {
 	}
 
 	consent := true
-	mod, err := newModuleFromDefinition(moduleDef(), metaSpec{
+	mod, err := newModuleFromDefinition(testModuleDefinition(), metaSpec{
 		Script:         rcPath,
 		Mode:           "execute",
 		Tool:           "/bin/echo",
@@ -151,7 +151,7 @@ func TestExecuteUsesToolArgOverrides(t *testing.T) {
 	}
 
 	consent := true
-	mod, err := newModuleFromDefinition(moduleDef(), metaSpec{
+	mod, err := newModuleFromDefinition(testModuleDefinition(), metaSpec{
 		Script:         rcPath,
 		Mode:           "execute",
 		Tool:           "/bin/echo",
@@ -185,7 +185,7 @@ func TestExecuteMarksFailureWithoutReturningError(t *testing.T) {
 	}
 
 	consent := true
-	mod, err := newModuleFromDefinition(moduleDef(), metaSpec{
+	mod, err := newModuleFromDefinition(testModuleDefinition(), metaSpec{
 		Script:         rcPath,
 		Mode:           "execute",
 		Tool:           "/bin/echo",
@@ -219,7 +219,7 @@ func TestTimeoutOverrideValidation(t *testing.T) {
 		t.Fatalf("write rc file: %v", err)
 	}
 
-	mod, err := newModuleFromDefinition(moduleDef(), metaSpec{
+	mod, err := newModuleFromDefinition(testModuleDefinition(), metaSpec{
 		Script:         rcPath,
 		Mode:           "simulate",
 		TimeoutSeconds: 5,
@@ -233,7 +233,7 @@ func TestTimeoutOverrideValidation(t *testing.T) {
 	}
 }
 
-func moduleDef() module.Definition {
+func testModuleDefinition() module.Definition {
 	return module.Definition{
 		Name: "metasploit/test",
 		Options: []module.Option{
