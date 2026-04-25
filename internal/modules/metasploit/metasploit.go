@@ -576,7 +576,7 @@ func validateVarName(raw string) error {
 }
 
 func validateVarValue(value string) error {
-	if strings.ContainsAny(value, "\x00\r\n`;&|") {
+	if strings.ContainsAny(value, "\x00\r\n`'\";&|") {
 		return errors.New("metasploit variable values cannot contain control characters or command separators")
 	}
 	if strings.Contains(value, "${") || strings.Contains(value, "$(") {
@@ -586,7 +586,7 @@ func validateVarValue(value string) error {
 }
 
 func validateToolArg(value string) error {
-	if strings.ContainsAny(value, "\x00\r\n`;&|") {
+	if strings.ContainsAny(value, "\x00\r\n`'\";&|") {
 		return errors.New("tool arguments cannot contain control characters or command separators")
 	}
 	if strings.Contains(value, "${") || strings.Contains(value, "$(") {
@@ -600,6 +600,9 @@ func resolveExecutable(raw string) (string, error) {
 	if candidate == "" {
 		return "", errors.New("metasploit executable cannot be empty")
 	}
+	if strings.ContainsAny(candidate, " \t\n\r`$\"'|&;<>") {
+		return "", errors.New("metasploit executable contains disallowed characters")
+	}
 	if strings.Contains(candidate, string(filepath.Separator)) {
 		path, err := normalizeLocalPath(candidate)
 		if err != nil {
@@ -609,9 +612,6 @@ func resolveExecutable(raw string) (string, error) {
 			return "", fmt.Errorf("metasploit executable is not accessible: %w", err)
 		}
 		return path, nil
-	}
-	if strings.ContainsAny(candidate, " \t\n\r`$\"'|&;<>") {
-		return "", errors.New("metasploit executable contains disallowed characters")
 	}
 	resolved, err := exec.LookPath(candidate)
 	if err != nil {
