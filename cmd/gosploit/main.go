@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/darksilenxe/Gosploit/internal/framework"
+	"github.com/darksilenxe/Gosploit/internal/modules/handleryaml"
 	"github.com/darksilenxe/Gosploit/internal/modules/sqlinjection"
 	"github.com/darksilenxe/Gosploit/internal/modules/yamltool"
 )
@@ -31,7 +32,9 @@ func main() {
 	var (
 		listModules bool
 		moduleName  string
+		handlerName string
 		yamlPath    string
+		handlerPath string
 		target      string
 		runModule   bool
 		runShell    bool
@@ -42,6 +45,8 @@ func main() {
 	flag.BoolVar(&listModules, "list", false, "List available modules")
 	flag.StringVar(&moduleName, "module", "", "Select module name")
 	flag.StringVar(&yamlPath, "yaml", "", "Load a YAML-defined auxiliary module")
+	flag.StringVar(&handlerName, "handler", "", "Select handler name")
+	flag.StringVar(&handlerPath, "handler-yaml", "", "Load a YAML-defined handler")
 	flag.StringVar(&target, "target", "", "Target identifier")
 	flag.BoolVar(&runModule, "run", false, "Run the active module")
 	flag.BoolVar(&runShell, "shell", false, "Launch go-shell interactive tool")
@@ -68,6 +73,15 @@ func main() {
 		must(err)
 		must(engine.Register(yamlModule))
 		must(engine.Use(yamlModule.Definition().Name))
+	}
+	if handlerName != "" {
+		must(engine.Use(handlerName))
+	}
+	if handlerPath != "" {
+		handlerModule, err := handleryaml.Load(handlerPath)
+		must(err)
+		must(engine.Register(handlerModule))
+		must(engine.Use(handlerModule.Definition().Name))
 	}
 
 	for _, pair := range setOptions {
@@ -104,7 +118,7 @@ func main() {
 		}
 	}
 
-	if !listModules && moduleName == "" && yamlPath == "" && !runModule && !showCurrent && len(setOptions) == 0 {
+	if !listModules && moduleName == "" && yamlPath == "" && handlerName == "" && handlerPath == "" && !runModule && !showCurrent && len(setOptions) == 0 {
 		flag.Usage()
 	}
 }

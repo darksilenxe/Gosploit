@@ -1,0 +1,18 @@
+name: handler/bind_tcp
+summary: Simulated bind TCP handler profile
+author: Gosploit Team
+references:
+  - https://docs.metasploit.com/docs/using-metasploit/basics/how-payloads-work.html
+options:
+  - name: rhost
+    description: Remote host exposing bind shell
+    required: true
+  - name: rport
+    description: Remote port for bind shell
+    required: true
+    defaultvalue: "4444"
+handler:
+  type: bind_tcp
+  payload: generic/shell_bind_tcp
+  rhost_option: rhost
+  rport_option: rport
