@@ -77,18 +77,18 @@ func (l *limitedBuffer) Write(p []byte) (int, error) {
 	}
 	if l.buf.Len() >= l.max {
 		l.truncated = true
-		return len(p), nil
+		return 0, nil
 	}
 	available := l.max - l.buf.Len()
 	if len(p) > available {
 		p = p[:available]
 		l.truncated = true
 	}
-	_, err := l.buf.Write(p)
+	written, err := l.buf.Write(p)
 	if err != nil {
 		return 0, err
 	}
-	return len(p), nil
+	return written, nil
 }
 
 func (l *limitedBuffer) String() string {

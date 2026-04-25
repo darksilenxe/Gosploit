@@ -152,7 +152,7 @@ func main() {
 		}
 	}
 
-	if !listModules && moduleName == "" && yamlPath == "" && handlerName == "" && handlerPath == "" && msfYAMLPath == "" && msfRCPath == "" && !runModule && !showCurrent && len(setOptions) == 0 && len(msfVars) == 0 && len(msfArgs) == 0 && msfMode == "" && msfExec == "" && msfTimeout == 0 && !msfConsent {
+	if shouldShowUsage(listModules, moduleName, yamlPath, handlerName, handlerPath, msfYAMLPath, msfRCPath, runModule, showCurrent, setOptions, msfVars, msfArgs, msfMode, msfExec, msfTimeout, msfConsent) {
 		flag.Usage()
 	}
 }
@@ -203,6 +203,25 @@ func applyMetasploitOverrides(engine *framework.Framework, msfMode, msfExec stri
 	for i, arg := range msfArgs {
 		must(engine.SetOption(fmt.Sprintf("msfarg.%03d", i), arg))
 	}
+}
+
+func shouldShowUsage(listModules bool, moduleName, yamlPath, handlerName, handlerPath, msfYAMLPath, msfRCPath string, runModule, showCurrent bool, setOptions, msfVars, msfArgs repeatedValues, msfMode, msfExec string, msfTimeout int, msfConsent bool) bool {
+	return !listModules &&
+		moduleName == "" &&
+		yamlPath == "" &&
+		handlerName == "" &&
+		handlerPath == "" &&
+		msfYAMLPath == "" &&
+		msfRCPath == "" &&
+		!runModule &&
+		!showCurrent &&
+		len(setOptions) == 0 &&
+		len(msfVars) == 0 &&
+		len(msfArgs) == 0 &&
+		msfMode == "" &&
+		msfExec == "" &&
+		msfTimeout == 0 &&
+		!msfConsent
 }
 
 func must(err error) {
