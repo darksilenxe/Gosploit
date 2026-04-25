@@ -1,0 +1,28 @@
+name: auxiliary/lab/local_network_segmentation_harness
+summary: Local lab-only segmentation validation harness for defensive control testing
+author: Gosploit Team
+references:
+  - https://csrc.nist.gov/publications/detail/sp/800-41/rev-1/final
+  - https://cheatsheetseries.owasp.org/cheatsheets/Network_Segmentation_Cheat_Sheet.html
+options:
+  - name: profile
+    description: Segmentation harness profile
+    required: true
+    defaultvalue: "segmentation-baseline"
+  - name: environment
+    description: Environment label; must remain in local lab
+    required: true
+    defaultvalue: "lab"
+checks:
+  - id: lab_scope_enforced
+    description: Ensure test execution remains constrained to local segmented lab networks
+    severity: critical
+    indicator: scope=local-lab
+  - id: deny_by_default_policy_indicator
+    description: Validate indicator that deny-by-default segmentation rules are active
+    severity: high
+    indicator: default-deny=true
+  - id: controlled_allowlist_paths
+    description: Validate indicator that only approved east-west paths are allowlisted
+    severity: medium
+    indicator: allowlist=controlled

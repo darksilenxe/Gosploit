@@ -1,0 +1,28 @@
+name: auxiliary/patch/os_patch_verification
+summary: Verify operating system patch baseline indicators against expected patch window
+author: Gosploit Team
+references:
+  - https://www.cisa.gov/known-exploited-vulnerabilities-catalog
+  - https://cheatsheetseries.owasp.org/cheatsheets/Vulnerability_Management_Cheat_Sheet.html
+options:
+  - name: host
+    description: Target host for patch verification
+    required: true
+    defaultvalue: ""
+  - name: baseline
+    description: Required patch baseline identifier (for example YYYY-MM)
+    required: true
+    defaultvalue: ""
+checks:
+  - id: security_update_level_current
+    description: Check indicator that security update level meets or exceeds baseline
+    severity: high
+    indicator: patch-baseline-current
+  - id: pending_reboot_absent
+    description: Check indicator that no pending reboot blocks patch effectiveness
+    severity: medium
+    indicator: reboot-required=false
+  - id: high_risk_cves_mitigated
+    description: Verify indicator that high-risk CVE remediation state is complete
+    severity: critical
+    indicator: high-risk-cves=0-open
