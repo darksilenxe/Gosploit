@@ -118,7 +118,7 @@ func (m Module) Execute(_ context.Context, options map[string]string) (module.Re
 }
 
 func setDefaultHostPortOptions(def *fileDefinition) {
-	isBind := strings.Contains(strings.ToLower(strings.TrimSpace(def.Handler.Type)), "bind")
+	isBind := isBindHandlerType(def.Handler.Type)
 
 	if strings.TrimSpace(def.Handler.hostOptionName()) == "" {
 		if isBind {
@@ -134,6 +134,11 @@ func setDefaultHostPortOptions(def *fileDefinition) {
 			def.Handler.LPortOption = "lport"
 		}
 	}
+}
+
+func isBindHandlerType(handlerType string) bool {
+	normalized := strings.ToLower(strings.TrimSpace(handlerType))
+	return normalized == "bind" || strings.HasPrefix(normalized, "bind_")
 }
 
 func (h handlerSpec) hostOptionName() string {
