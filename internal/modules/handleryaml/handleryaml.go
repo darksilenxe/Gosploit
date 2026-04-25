@@ -16,6 +16,8 @@ type handlerSpec struct {
 	Payload     string `yaml:"payload"`
 	LHostOption string `yaml:"lhost_option"`
 	LPortOption string `yaml:"lport_option"`
+	RHostOption string `yaml:"rhost_option"`
+	RPortOption string `yaml:"rport_option"`
 }
 
 type fileDefinition struct {
@@ -51,12 +53,7 @@ func Load(path string) (Module, error) {
 	if strings.TrimSpace(def.Handler.Type) == "" {
 		def.Handler.Type = "generic"
 	}
-	if strings.TrimSpace(def.Handler.LHostOption) == "" {
-		def.Handler.LHostOption = "lhost"
-	}
-	if strings.TrimSpace(def.Handler.LPortOption) == "" {
-		def.Handler.LPortOption = "lport"
-	}
+	setDefaultHostPortOptions(&def)
 
 	return Module{def: def}, nil
 }
@@ -89,14 +86,16 @@ func (m Module) Execute(_ context.Context, options map[string]string) (module.Re
 		evidence["handler.payload"] = payload
 	}
 
-	if hostOption := strings.ToLower(strings.TrimSpace(m.def.Handler.LHostOption)); hostOption != "" {
-		evidence["handler.lhost_option"] = hostOption
-		evidence["handler.lhost"] = strings.TrimSpace(options[hostOption])
+	hostOption := strings.ToLower(strings.TrimSpace(m.def.Handler.hostOptionName()))
+	if hostOption != "" {
+		evidence["handler.host_option"] = hostOption
+		evidence["handler.host"] = strings.TrimSpace(options[hostOption])
 	}
 
-	if portOption := strings.ToLower(strings.TrimSpace(m.def.Handler.LPortOption)); portOption != "" {
-		evidence["handler.lport_option"] = portOption
-		evidence["handler.lport"] = strings.TrimSpace(options[portOption])
+	portOption := strings.ToLower(strings.TrimSpace(m.def.Handler.portOptionName()))
+	if portOption != "" {
+		evidence["handler.port_option"] = portOption
+		evidence["handler.port"] = strings.TrimSpace(options[portOption])
 	}
 
 	for k, v := range options {
@@ -108,4 +107,35 @@ func (m Module) Execute(_ context.Context, options map[string]string) (module.Re
 		Message:  "handler loaded and executed in simulation mode",
 		Evidence: evidence,
 	}, nil
+}
+
+func setDefaultHostPortOptions(def *fileDefinition) {
+	if strings.TrimSpace(def.Handler.hostOptionName()) == "" {
+		if strings.Contains(strings.ToLower(strings.TrimSpace(def.Handler.Type)), "bind") {
+			def.Handler.RHostOption = "rhost"
+		} else {
+			def.Handler.LHostOption = "lhost"
+		}
+	}
+	if strings.TrimSpace(def.Handler.portOptionName()) == "" {
+		if strings.Contains(strings.ToLower(strings.TrimSpace(def.Handler.Type)), "bind") {
+			def.Handler.RPortOption = "rport"
+		} else {
+			def.Handler.LPortOption = "lport"
+		}
+	}
+}
+
+func (h handlerSpec) hostOptionName() string {
+	if strings.TrimSpace(h.RHostOption) != "" {
+		return h.RHostOption
+	}
+	return h.LHostOption
+}
+
+func (h handlerSpec) portOptionName() string {
+	if strings.TrimSpace(h.RPortOption) != "" {
+		return h.RPortOption
+	}
+	return h.LPortOption
 }

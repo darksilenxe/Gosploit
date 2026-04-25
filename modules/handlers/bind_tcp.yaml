@@ -15,5 +15,5 @@ options:
 handler:
   type: bind_tcp
   payload: generic/shell_bind_tcp
-  lhost_option: rhost
-  lport_option: rport
+  rhost_option: rhost
+  rport_option: rport

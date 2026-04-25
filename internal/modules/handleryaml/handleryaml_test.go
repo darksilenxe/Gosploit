@@ -63,3 +63,38 @@ handler:
 		t.Fatal("expected load error")
 	}
 }
+
+func TestBindHandlerDefaultsToRemoteOptions(t *testing.T) {
+	dir := t.TempDir()
+	path := filepath.Join(dir, "handler.yaml")
+	content := `name: handler/bind_tcp
+summary: Example bind TCP handler
+options:
+  - name: rhost
+    required: true
+  - name: rport
+    required: true
+handler:
+  type: bind_tcp
+`
+	if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+		t.Fatalf("failed to write yaml file: %v", err)
+	}
+
+	mod, err := Load(path)
+	if err != nil {
+		t.Fatalf("load failed: %v", err)
+	}
+
+	res, err := mod.Execute(context.Background(), map[string]string{"rhost": "10.10.10.10", "rport": "4444"})
+	if err != nil {
+		t.Fatalf("execute failed: %v", err)
+	}
+
+	if got := res.Evidence["handler.host_option"]; got != "rhost" {
+		t.Fatalf("expected rhost option, got %q", got)
+	}
+	if got := res.Evidence["handler.port_option"]; got != "rport" {
+		t.Fatalf("expected rport option, got %q", got)
+	}
+}
