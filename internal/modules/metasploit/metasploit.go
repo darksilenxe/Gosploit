@@ -204,10 +204,13 @@ func NewFromCLI(scriptPath, mode, tool string, timeoutSeconds int) (Module, erro
 }
 
 func newModuleFromDefinition(def module.Definition, spec metaSpec) (Module, error) {
-	mode := normalizedMode(spec.Mode)
-	if mode == "" {
+	if strings.TrimSpace(spec.Mode) == "" {
 		spec.Mode = modeSimulate
 	} else {
+		mode := normalizedMode(spec.Mode)
+		if mode == "" {
+			return Module{}, fmt.Errorf("invalid metasploit mode %q, expected %q or %q", spec.Mode, modeSimulate, modeExecute)
+		}
 		spec.Mode = mode
 	}
 	if spec.RequireConsent == nil {
@@ -251,9 +254,9 @@ func (m Module) Validate(options map[string]string) error {
 		}
 	}
 
-	mode := m.modeFromOptions(options)
-	if mode != modeSimulate && mode != modeExecute {
-		return fmt.Errorf("invalid metasploit mode %q, expected %q or %q", mode, modeSimulate, modeExecute)
+	mode, err := m.modeFromOptions(options)
+	if err != nil {
+		return err
 	}
 	scriptPath, err := m.scriptFromOptions(options)
 	if err != nil {
@@ -287,7 +290,10 @@ func (m Module) Execute(ctx context.Context, options map[string]string) (module.
 		return module.Result{}, err
 	}
 
-	mode := m.modeFromOptions(options)
+	mode, err := m.modeFromOptions(options)
+	if err != nil {
+		return module.Result{}, err
+	}
 	scriptPath, _ := m.scriptFromOptions(options)
 	vars, _ := m.mappedVariables(options)
 
@@ -334,11 +340,21 @@ func (m Module) Execute(ctx context.Context, options map[string]string) (module.
 	return module.Result{Success: true, Message: "metasploit execution completed", Evidence: evidence}, nil
 }
 
-func (m Module) modeFromOptions(options map[string]string) string {
-	if override := normalizedMode(options["msf_mode"]); override != "" {
-		return override
+func (m Module) modeFromOptions(options map[string]string) (string, error) {
+	if overrideRaw := strings.TrimSpace(options["msf_mode"]); overrideRaw != "" {
+		override := normalizedMode(overrideRaw)
+		if override == "" {
+			return "", fmt.Errorf("invalid metasploit mode %q, expected %q or %q", overrideRaw, modeSimulate, modeExecute)
+		}
+		return override, nil
 	}
-	return normalizedMode(m.spec.Mode)
+
+	modeRaw := strings.TrimSpace(m.spec.Mode)
+	mode := normalizedMode(modeRaw)
+	if mode == "" {
+		return "", fmt.Errorf("invalid metasploit mode %q, expected %q or %q", modeRaw, modeSimulate, modeExecute)
+	}
+	return mode, nil
 }
 
 func (m Module) scriptFromOptions(options map[string]string) (string, error) {
@@ -548,7 +564,7 @@ func normalizedMode(raw string) string {
 	if value == modeSimulate || value == modeExecute {
 		return value
 	}
-	return value
+	return ""
 }
 
 func validateVarName(raw string) error {

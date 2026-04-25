@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 	"testing"
-	"time"
 
 	"github.com/darksilenxe/Gosploit/internal/module"
 )
@@ -227,7 +226,7 @@ func TestTimeoutOverrideValidation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("new module: %v", err)
 	}
-	_, err = mod.timeoutFromOptions(map[string]string{"msf_timeout": strconv.Itoa(int((10 * time.Minute).Seconds() + 1))})
+	_, err = mod.timeoutFromOptions(map[string]string{"msf_timeout": strconv.Itoa(int(maxTimeout.Seconds()) + 1)})
 	if err == nil {
 		t.Fatal("expected timeout validation error")
 	}
