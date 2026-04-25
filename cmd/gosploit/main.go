@@ -192,7 +192,7 @@ func applyMetasploitOverrides(engine *framework.Framework, msfMode, msfExec stri
 	for _, pair := range msfVars {
 		parts := strings.SplitN(pair, "=", 2)
 		if len(parts) != 2 {
-			fatalf("invalid -msf-var value %q, expected KEY=VALUE", pair)
+			fatalf("invalid -msf-var value %q, expected non-empty KEY=VALUE format", pair)
 		}
 		key := strings.TrimSpace(parts[0])
 		if key == "" {
