@@ -93,13 +93,17 @@ func (m Module) Execute(_ context.Context, options map[string]string) (module.Re
 	hostOption := strings.ToLower(strings.TrimSpace(m.def.Handler.hostOptionName()))
 	if hostOption != "" {
 		evidence["handler.host_option"] = hostOption
-		evidence["handler.host"] = strings.TrimSpace(options[hostOption])
+		if hostValue := strings.TrimSpace(options[hostOption]); hostValue != "" {
+			evidence["handler.host"] = hostValue
+		}
 	}
 
 	portOption := strings.ToLower(strings.TrimSpace(m.def.Handler.portOptionName()))
 	if portOption != "" {
 		evidence["handler.port_option"] = portOption
-		evidence["handler.port"] = strings.TrimSpace(options[portOption])
+		if portValue := strings.TrimSpace(options[portOption]); portValue != "" {
+			evidence["handler.port"] = portValue
+		}
 	}
 
 	for k, v := range options {
@@ -114,15 +118,17 @@ func (m Module) Execute(_ context.Context, options map[string]string) (module.Re
 }
 
 func setDefaultHostPortOptions(def *fileDefinition) {
+	isBind := strings.Contains(strings.ToLower(strings.TrimSpace(def.Handler.Type)), "bind")
+
 	if strings.TrimSpace(def.Handler.hostOptionName()) == "" {
-		if strings.Contains(strings.ToLower(strings.TrimSpace(def.Handler.Type)), "bind") {
+		if isBind {
 			def.Handler.RHostOption = "rhost"
 		} else {
 			def.Handler.LHostOption = "lhost"
 		}
 	}
 	if strings.TrimSpace(def.Handler.portOptionName()) == "" {
-		if strings.Contains(strings.ToLower(strings.TrimSpace(def.Handler.Type)), "bind") {
+		if isBind {
 			def.Handler.RPortOption = "rport"
 		} else {
 			def.Handler.LPortOption = "lport"
