@@ -1,0 +1,23 @@
+name: auxiliary/network/dns_recursion_exposure
+summary: Check for potentially exposed recursive DNS resolver behavior
+author: Gosploit Team
+references:
+  - https://www.cisa.gov/news-events/alerts/2017/01/10/dns-best-practices-network-protection
+options:
+  - name: host
+    description: DNS server host or IP
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: DNS service port
+    required: false
+    defaultvalue: "53"
+checks:
+  - id: open_recursion
+    description: Detect resolver recursion for untrusted clients
+    severity: high
+    indicator: recursion available
+  - id: version_disclosure
+    description: Detect DNS software version disclosure indicators
+    severity: medium
+    indicator: version.bind

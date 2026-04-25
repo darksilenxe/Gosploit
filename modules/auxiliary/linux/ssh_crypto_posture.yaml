@@ -1,0 +1,23 @@
+name: auxiliary/linux/ssh_crypto_posture
+summary: Audit SSH cryptographic posture indicators
+author: Gosploit Team
+references:
+  - https://www.ssh-audit.com/hardening_guides.html
+options:
+  - name: host
+    description: Target host exposing SSH
+    required: true
+    defaultvalue: ""
+  - name: port
+    description: SSH service port
+    required: false
+    defaultvalue: "22"
+checks:
+  - id: weak_key_exchange
+    description: Detect weak key exchange algorithm indicators
+    severity: high
+    indicator: diffie-hellman-group1-sha1
+  - id: weak_mac_algorithms
+    description: Detect weak MAC algorithm indicators
+    severity: medium
+    indicator: hmac-md5,hmac-sha1
