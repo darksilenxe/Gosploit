@@ -1,0 +1,3 @@
+spool /tmp/gosploit_msf_sample.log
+version
+exit -y
