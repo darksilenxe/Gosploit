@@ -26,6 +26,8 @@ go run ./cmd/gosploit -yaml ./modules/auxiliary/linux/ssh_crypto_posture.yaml -s
 go run ./cmd/gosploit -yaml ./modules/auxiliary/windows/smb_hardening.yaml -set host=win.example.com -set port=445 -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/vulnerability/http_dependency_exposure.yaml -set url=https://example.com -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/vulnerability/tls_known_weakness_indicators.yaml -set host=example.com -set port=443 -show -run
+go run ./cmd/gosploit -yaml ./modules/auxiliary/vulnerability/http_auth_surface_discovery.yaml -set url=https://example.com -show -run
+go run ./cmd/gosploit -yaml ./modules/auxiliary/vulnerability/api_data_exposure_discovery.yaml -set base_url=https://api.example.com -set endpoint=/v1/profile -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/misconfig/cloud_storage_public_access.yaml -set provider=aws -set resource=example-bucket -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/misconfig/container_runtime_hardening.yaml -set host=lab-node.local -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/patch/os_patch_verification.yaml -set host=server.example.com -set baseline=2026-04 -show -run
@@ -33,7 +35,9 @@ go run ./cmd/gosploit -yaml ./modules/auxiliary/patch/application_patch_verifica
 go run ./cmd/gosploit -yaml ./modules/auxiliary/lab/local_http_security_harness.yaml -set profile=web-minimum -set environment=lab -show -run
 go run ./cmd/gosploit -yaml ./modules/auxiliary/lab/local_network_segmentation_harness.yaml -set profile=segmentation-baseline -set environment=lab -show -run
 go run ./cmd/gosploit -yaml ./modules/exploit/web/sqli_safe_probe.yaml -set url=https://example.com/search -set param=q -show -run
+go run ./cmd/gosploit -yaml ./modules/exploit/web/xss_safe_probe.yaml -set url=https://example.com/search -set param=q -show -run
 go run ./cmd/gosploit -yaml ./modules/exploit/api/idor_safe_probe.yaml -set base_url=https://api.example.com -set endpoint=/users/1 -show -run
+go run ./cmd/gosploit -yaml ./modules/exploit/api/mass_assignment_safe_probe.yaml -set base_url=https://api.example.com -set endpoint=/users/1 -show -run
 go run ./cmd/gosploit -handler-yaml ./modules/handlers/reverse_tcp.yaml -set lhost=127.0.0.1 -set lport=4444 -show -run
 go run ./cmd/gosploit -module exploit/web/sqlinjection -set url=https://example.com/search -set param=q -run
 ```
