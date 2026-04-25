@@ -1,0 +1,28 @@
+name: auxiliary/patch/application_patch_verification
+summary: Verify application component version and patch rollout indicators
+author: Gosploit Team
+references:
+  - https://owasp.org/www-project-dependency-check/
+  - https://www.sans.org/white-papers/33649/
+options:
+  - name: application
+    description: Application or service name
+    required: true
+    defaultvalue: ""
+  - name: expected_version
+    description: Expected patched version string
+    required: true
+    defaultvalue: ""
+checks:
+  - id: target_version_matches_baseline
+    description: Check indicator that deployed version matches expected patched version
+    severity: high
+    indicator: version=expected
+  - id: vulnerable_component_absent
+    description: Check indicator that vulnerable legacy component build is absent
+    severity: high
+    indicator: vulnerable-component=absent
+  - id: rollback_protection_enabled
+    description: Check indicator that rollback to vulnerable release is blocked
+    severity: medium
+    indicator: rollback-protection=true

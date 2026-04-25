@@ -1,0 +1,28 @@
+name: auxiliary/misconfig/cloud_storage_public_access
+summary: Audit cloud storage resources for public-access misconfiguration indicators
+author: Gosploit Team
+references:
+  - https://owasp.org/www-project-cloud-native-application-security-top-10/
+  - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+options:
+  - name: provider
+    description: Cloud provider identifier (aws, azure, gcp)
+    required: true
+    defaultvalue: ""
+  - name: resource
+    description: Storage resource identifier (bucket/container)
+    required: true
+    defaultvalue: ""
+checks:
+  - id: public_read_exposure
+    description: Detect indicator that anonymous read access may be enabled
+    severity: high
+    indicator: public read,anonymous list
+  - id: public_write_exposure
+    description: Detect indicator that anonymous write access may be enabled
+    severity: critical
+    indicator: public write,anonymous upload
+  - id: block_public_access_disabled
+    description: Check indicator that baseline public access blocking control is disabled
+    severity: high
+    indicator: block-public-access=false

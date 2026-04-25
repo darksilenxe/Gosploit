@@ -1,0 +1,24 @@
+name: auxiliary/misconfig/container_runtime_hardening
+summary: Audit container runtime hardening baseline indicators
+author: Gosploit Team
+references:
+  - https://kubernetes.io/docs/concepts/security/pod-security-standards/
+  - https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+options:
+  - name: host
+    description: Container host or orchestrator node identifier
+    required: true
+    defaultvalue: ""
+checks:
+  - id: privileged_container_policy
+    description: Check indicator that privileged container execution is restricted
+    severity: high
+    indicator: privileged=false
+  - id: host_namespace_sharing_restricted
+    description: Check indicator that host namespace sharing is restricted
+    severity: high
+    indicator: hostNetwork=false,hostPID=false
+  - id: readonly_root_filesystem_enabled
+    description: Check indicator that read-only root filesystem baseline is enforced
+    severity: medium
+    indicator: readOnlyRootFilesystem=true

@@ -1,0 +1,28 @@
+name: auxiliary/lab/local_http_security_harness
+summary: Local lab-only HTTP security validation harness with non-destructive checks
+author: Gosploit Team
+references:
+  - https://owasp.org/www-project-web-security-testing-guide/
+  - https://cheatsheetseries.owasp.org/cheatsheets/Web_Security_Testing_Cheat_Sheet.html
+options:
+  - name: profile
+    description: Lab harness profile name
+    required: true
+    defaultvalue: "web-minimum"
+  - name: environment
+    description: Environment label; must be local lab scope
+    required: true
+    defaultvalue: "lab"
+checks:
+  - id: environment_scope_lab_only
+    description: Ensure harness execution is explicitly constrained to local lab environments
+    severity: critical
+    indicator: environment=lab-only
+  - id: non_destructive_test_mode
+    description: Ensure all validation checks run in non-destructive mode
+    severity: high
+    indicator: safe-mode=true
+  - id: synthetic_target_validation
+    description: Validate that targets are synthetic or locally controlled assets
+    severity: high
+    indicator: target-class=synthetic-local
