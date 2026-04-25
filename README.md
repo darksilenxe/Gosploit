@@ -77,6 +77,13 @@ Load and run a handler profile:
 go run ./cmd/gosploit -handler-yaml ./modules/handlers/reverse_tcp.yaml -set lhost=127.0.0.1 -set lport=4444 -show -run
 ```
 
+Available handler YAML profiles:
+
+- `modules/handlers/reverse_tcp.yaml`
+- `modules/handlers/bind_tcp.yaml`
+- `modules/handlers/reverse_http.yaml`
+- `modules/handlers/reverse_https.yaml`
+
 ## Module templates
 
 Protocol starter templates are available in `/modules/templates`:
@@ -85,7 +92,6 @@ Protocol starter templates are available in `/modules/templates`:
 - `modules/templates/smb_module_template.yaml`
 - `modules/templates/rdp_module_template.yaml`
 - `modules/templates/rpc_module_template.yaml`
-- `modules/templates/handler_template.yaml`
 
 Copy one, replace placeholders, then load it with:
 

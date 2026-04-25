@@ -1,0 +1,19 @@
+name: handler/reverse_https
+summary: Simulated reverse HTTPS handler profile
+author: Gosploit Team
+references:
+  - https://docs.metasploit.com/docs/using-metasploit/intermediate/pivoting-in-metasploit.html
+options:
+  - name: lhost
+    description: Local host to receive callback
+    required: true
+    defaultvalue: "127.0.0.1"
+  - name: lport
+    description: Local port to receive callback
+    required: true
+    defaultvalue: "8443"
+handler:
+  type: reverse_https
+  payload: generic/shell_reverse_https
+  lhost_option: lhost
+  lport_option: lport
