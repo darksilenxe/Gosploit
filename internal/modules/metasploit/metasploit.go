@@ -576,7 +576,7 @@ func validateVarName(raw string) error {
 }
 
 func validateVarValue(value string) error {
-	if strings.ContainsAny(value, "\x00\r\n`;") {
+	if strings.ContainsAny(value, "\x00\r\n`;&|") {
 		return errors.New("metasploit variable values cannot contain control characters or command separators")
 	}
 	if strings.Contains(value, "${") || strings.Contains(value, "$(") {
@@ -586,8 +586,8 @@ func validateVarValue(value string) error {
 }
 
 func validateToolArg(value string) error {
-	if strings.ContainsAny(value, "\x00\r\n`") {
-		return errors.New("tool arguments cannot contain control characters or backticks")
+	if strings.ContainsAny(value, "\x00\r\n`;&|") {
+		return errors.New("tool arguments cannot contain control characters or command separators")
 	}
 	if strings.Contains(value, "${") || strings.Contains(value, "$(") {
 		return errors.New("tool arguments cannot contain shell-expansion patterns")
