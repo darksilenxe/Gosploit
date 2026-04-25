@@ -78,6 +78,10 @@ func (m Module) Validate(options map[string]string) error {
 }
 
 func (m Module) Execute(_ context.Context, options map[string]string) (module.Result, error) {
+	if err := m.Validate(options); err != nil {
+		return module.Result{}, err
+	}
+
 	evidence := map[string]string{
 		"handler.type": strings.ToLower(strings.TrimSpace(m.def.Handler.Type)),
 	}

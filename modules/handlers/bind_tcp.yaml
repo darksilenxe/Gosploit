@@ -7,7 +7,6 @@ options:
   - name: rhost
     description: Remote host exposing bind shell
     required: true
-    defaultvalue: ""
   - name: rport
     description: Remote port for bind shell
     required: true
