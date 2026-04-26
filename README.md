@@ -8,6 +8,7 @@ Gosploit is a Go-based exploit development and security testing framework scaffo
 - Built-in simulated SQL injection module
 - YAML-defined auxiliary scanner/vulnerability-check modules
 - YAML-defined handlers
+- YAML-defined and CLI-defined Metasploit tool integrations (consent-gated)
 - CLI entrypoint to list, select, configure, and run modules
 
 > Use only on systems you own or are explicitly authorized to test.
@@ -40,6 +41,7 @@ go run ./cmd/gosploit -yaml ./modules/exploit/api/idor_safe_probe.yaml -set base
 go run ./cmd/gosploit -yaml ./modules/exploit/api/mass_assignment_safe_probe.yaml -set base_url=https://api.example.com -set endpoint=/users/1 -show -run
 go run ./cmd/gosploit -handler-yaml ./modules/handlers/reverse_tcp.yaml -set lhost=127.0.0.1 -set lport=4444 -show -run
 go run ./cmd/gosploit -module exploit/web/sqlinjection -set url=https://example.com/search -set param=q -run
+go run ./cmd/gosploit -msf-rc ./modules/metasploit/sample.rc -msf-mode simulate -show -run
 ```
 
 ## YAML auxiliary module format
@@ -114,6 +116,57 @@ Available handler YAML profiles:
 - `modules/handlers/bind_tcp.yaml`
 - `modules/handlers/reverse_http.yaml`
 - `modules/handlers/reverse_https.yaml`
+
+## Metasploit integration (authorized use only)
+
+Metasploit execution is disabled by default and only runs when explicitly requested with Metasploit flags.
+
+- `-metasploit-yaml`: load a Metasploit-backed YAML module definition
+- `-msf-rc`: run a Metasploit resource script directly
+- `-msf-mode`: `simulate` (default) or `execute`
+- `-msf-tool`: local Metasploit tool/executable (for example `msfconsole`, `msfvenom`, or an absolute local path)
+- `-msf-timeout`: timeout in seconds (max 600)
+- `-msf-consent`: required for real external execution
+- `-msf-var KEY=VALUE`: map variable overrides
+- `-msf-arg VALUE`: pass explicit tool args (repeatable)
+
+Examples:
+
+```bash
+# Safe simulation (no external process launch)
+go run ./cmd/gosploit -msf-rc ./modules/metasploit/sample.rc -msf-mode simulate -run
+
+# Explicit external execution with consent
+go run ./cmd/gosploit -msf-rc ./modules/metasploit/sample.rc -msf-mode execute -msf-tool msfconsole -msf-consent -run
+
+# Run another local Metasploit tool with explicit args
+go run ./cmd/gosploit -msf-rc ./modules/metasploit/sample.rc -msf-mode execute -msf-tool msfvenom -msf-arg --help -msf-consent -run
+```
+
+Minimal YAML schema for Metasploit-backed modules:
+
+```yaml
+name: metasploit/resource/example
+summary: Example Metasploit workflow
+author: Gosploit Team
+options:
+  - name: rhost
+    required: true
+metasploit:
+  script: ./sample.rc
+  mode: simulate
+  tool: msfconsole
+  timeout_seconds: 30
+  require_consent: true
+  option_map:
+    rhost: RHOSTS
+  required_vars:
+    - RHOSTS
+  optional_vars:
+    - LPORT
+```
+
+> Metasploit execution must be used only on systems you own or are explicitly authorized to test.
 
 ## Module templates
 

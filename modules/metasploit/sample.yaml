@@ -1,0 +1,19 @@
+name: metasploit/resource/sample
+summary: Sample Metasploit resource module
+author: Gosploit Team
+options:
+  - name: rhost
+    description: Remote target host
+    required: true
+metasploit:
+  script: ./sample.rc
+  mode: simulate
+  tool: msfconsole
+  timeout_seconds: 30
+  require_consent: true
+  option_map:
+    rhost: RHOSTS
+  required_vars:
+    - RHOSTS
+  optional_vars:
+    - LPORT
